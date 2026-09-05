@@ -1,13 +1,18 @@
-const CACHE = "finance-cockpit-v2";
-const SHEETJS = "https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js";
-const MSAL = "https://alcdn.msftauth.net/browser/2.35.0/js/msal-browser.min.js";
+const CACHE = "finance-cockpit-v3";
+const EXTERNAL_ASSETS = [
+  "https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js",
+  "https://cdn.jsdelivr.net/npm/dropbox@10.34.0/dist/Dropbox-sdk.min.js",
+  "https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"
+];
 const LOCAL_ASSETS = [
   "./",
   "./index.html",
   "./styles.css",
-  "./onedrive.css",
+  "./dropbox.css",
   "./app.js",
-  "./onedrive.js",
+  "./dropbox-auth.js",
+  "./finance-xlsx.js",
+  "./dropbox-sync.js",
   "./manifest.webmanifest",
   "./icon.svg"
 ];
@@ -16,7 +21,7 @@ self.addEventListener("install", (event) => {
   event.waitUntil((async () => {
     const cache = await caches.open(CACHE);
     await cache.addAll(LOCAL_ASSETS);
-    for (const asset of [SHEETJS, MSAL]) {
+    for (const asset of EXTERNAL_ASSETS) {
       try {
         const response = await fetch(asset, { mode: "no-cors" });
         await cache.put(asset, response);
