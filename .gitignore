@@ -1,0 +1,18 @@
+# Keine echten Daten hochladen
+*.xlsx
+*.xls
+*.xlsm
+*.csv
+*.ods
+*.db
+*.sqlite
+*.sqlite3
+*.jsonl
+
+# Lokale Entwicklungsdateien
+.DS_Store
+Thumbs.db
+.env
+.env.*
+node_modules/
+dist/
