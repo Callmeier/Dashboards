@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#111827">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Finanzen">
+  <title>Finance Cockpit</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="./icon.svg">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div>
+        <div class="eyebrow">CALLMEIER</div>
+        <h1>Finance Cockpit</h1>
+      </div>
+      <button id="importButton" class="button secondary" type="button">Excel aktualisieren</button>
+      <input id="fileInput" type="file" accept=".xlsx,.xlsm,.xls" hidden>
+    </header>
+
+    <main>
+      <section id="welcome" class="welcome card">
+        <div class="welcome-icon">€</div>
+        <div>
+          <h2>Dein Excel-Dashboard als App</h2>
+          <p>Wähle deine Excel-Datei aus. Sie wird nur auf diesem Gerät verarbeitet und lokal zwischengespeichert.</p>
+          <div class="actions">
+            <button id="welcomeImportButton" class="button primary" type="button">Excel-Datei auswählen</button>
+          </div>
+          <p class="privacy-note">Keine Finanzdaten werden an GitHub oder den Webserver übertragen.</p>
+        </div>
+      </section>
+
+      <section id="dashboard" class="hidden">
+        <div class="control-row">
+          <div>
+            <div class="eyebrow">Auswertung</div>
+            <select id="monthSelect" aria-label="Auswertungsmonat"></select>
+          </div>
+          <div class="file-state">
+            <span id="statusDot" class="status-dot"></span>
+            <div>
+              <strong id="fileName">–</strong>
+              <span id="fileMeta">lokal gespeichert</span>
+            </div>
+          </div>
+        </div>
+
+        <section id="alertBox" class="alert hidden" aria-live="polite"></section>
+
+        <section class="hero-grid">
+          <article class="card kpi hero-kpi">
+            <span class="kpi-label">Nettovermögen</span>
+            <strong id="netWorth" class="kpi-value">–</strong>
+            <span id="netWorthSub" class="kpi-sub">–</span>
+          </article>
+          <article class="card kpi">
+            <span class="kpi-label">Veränderung zum Vormonat</span>
+            <strong id="momChange" class="kpi-value compact">–</strong>
+            <span id="momChangePct" class="kpi-sub">–</span>
+          </article>
+          <article class="card kpi">
+            <span class="kpi-label">YTD-Veränderung</span>
+            <strong id="ytdChange" class="kpi-value compact">–</strong>
+            <span class="kpi-sub">seit Januar</span>
+          </article>
+          <article class="card kpi score-card">
+            <span class="kpi-label">Finanzscore</span>
+            <div class="score-line">
+              <strong id="financeScore" class="kpi-value compact">–</strong>
+              <span id="financeStatus" class="pill">–</span>
+            </div>
+            <span id="qualityText" class="kpi-sub">–</span>
+          </article>
+        </section>
+
+        <section class="mini-grid">
+          <article class="card mini-kpi"><span>Liquidität + Rücklagen</span><strong id="liquidity">–</strong></article>
+          <article class="card mini-kpi"><span>Liquiditätsreserve</span><strong id="reserveMonths">–</strong></article>
+          <article class="card mini-kpi"><span>Investments</span><strong id="investments">–</strong></article>
+          <article class="card mini-kpi"><span>Verbindlichkeiten</span><strong id="liabilities">–</strong></article>
+        </section>
+
+        <section class="content-grid">
+          <article class="card panel">
+            <div class="panel-head">
+              <div>
+                <span class="eyebrow">Entwicklung</span>
+                <h2>Nettovermögen im Jahresverlauf</h2>
+              </div>
+            </div>
+            <div id="trendChart" class="chart" role="img" aria-label="Jahresverlauf Nettovermögen"></div>
+          </article>
+
+          <article class="card panel">
+            <div class="panel-head">
+              <div>
+                <span class="eyebrow">Struktur</span>
+                <h2>Asset-Allokation</h2>
+              </div>
+            </div>
+            <div id="allocation" class="allocation"></div>
+          </article>
+        </section>
+
+        <section class="content-grid lower-grid">
+          <article class="card panel">
+            <div class="panel-head">
+              <div>
+                <span class="eyebrow">Finanzassistent</span>
+                <h2>Automatische Hinweise</h2>
+              </div>
+            </div>
+            <div id="assistantHints" class="hints"></div>
+          </article>
+
+          <article class="card panel">
+            <div class="panel-head">
+              <div>
+                <span class="eyebrow">Regelmäßige Zahlungen</span>
+                <h2>Monatlicher Überblick</h2>
+              </div>
+            </div>
+            <div class="payment-grid">
+              <div><span>Aktive Positionen</span><strong id="activePayments">–</strong></div>
+              <div><span>Monatsäquivalent</span><strong id="monthlyEquivalent">–</strong></div>
+              <div><span>Vermögensaufbau</span><strong id="monthlyWealthBuild">–</strong></div>
+            </div>
+          </article>
+        </section>
+
+        <footer>
+          <span>Die Datenverarbeitung erfolgt lokal im Browser.</span>
+          <button id="forgetButton" class="text-button" type="button">Lokale Datei vergessen</button>
+        </footer>
+      </section>
+    </main>
+  </div>
+
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
