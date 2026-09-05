@@ -1,42 +1,27 @@
 # Dashboard Private Finanzen
 
-Installierbare PWA für das Excel-basierte **Callmeier Finance Cockpit**.
+Eigenständige PWA für das **Callmeier Finance Cockpit**.
 
-## Funktionsumfang
+## Funktionen
 
-- Excel-Datei wird direkt im Browser eingelesen
-- keine Finanzdaten werden an GitHub oder den Webserver übertragen
-- letzte importierte Excel-Datei wird lokal per IndexedDB auf dem Gerät gespeichert
-- Monatsauswahl Januar bis Dezember
-- Nettovermögen, MoM, YTD und Finanzscore
-- Liquidität, Rücklagen, Investments und Verbindlichkeiten
-- Jahresverlauf als SVG-Chart
-- Asset-Allokation
-- automatische Hinweise anhand der Parameter aus `05_Ziele_Parameter`
-- Zusammenfassung regelmäßiger Zahlungen
-- installierbar als PWA
-- Offline-App-Shell per Service Worker
+- lokaler Excel-Import im Browser
+- responsive KPI- und Vermögensübersicht
+- Monatswahl, Jahresverlauf und Asset-Allokation
+- automatische Hinweise anhand der Excel-Parameter
+- lokale Zwischenspeicherung auf dem Gerät
+- PWA-Installation und Offline-Grundfunktion
+- **Dropbox-Synchronisierung für Monatsstände**
 
-## Erwartete Excel-Struktur
+## Dropbox-Modus
 
-Die App liest insbesondere:
+Die PWA kann eine `.xlsx`- oder `.xlsm`-Datei aus einem Dropbox-App-Ordner laden. Unter **Daten erfassen** können die Werte für `03_Monatsstaende` eingegeben und anschließend wieder in dieselbe Dropbox-Datei gespeichert werden.
 
-- `04_Monatsauswertung`
-- `05_Ziele_Parameter`
-- `11_Regelmaessige_Zahlungen` (optional)
+Dropbox dient als Dateispeicher; die PWA berechnet die für das Dashboard benötigten Kennzahlen direkt im Browser und aktualisiert zusätzlich die Excel-Berechnungscaches. Excel wird beim nächsten Öffnen zur vollständigen Neuberechnung aufgefordert.
 
-Die Formeln werden weiterhin in Excel berechnet. Nach Änderungen an der Datei sollte sie in Excel gespeichert werden, bevor sie erneut in die PWA importiert wird.
-
-## Cloudflare Pages
-
-Dieses Dashboard kann als eigenes Cloudflare-Pages-Projekt aus dem Monorepo veröffentlicht werden.
-
-- Repository: `Callmeier/Dashboards`
-- Production branch: `main`
-- Root directory: `private-finanzen`
-- Build command: leer
-- Build output directory: `.`
+Die einmalige Dropbox-Einrichtung ist in [`DROPBOX_SETUP.md`](./DROPBOX_SETUP.md) beschrieben.
 
 ## Datenschutz
 
-Keine `.xlsx`, `.xls`, `.csv` oder Datenbankdateien mit echten Finanzdaten in GitHub ablegen. Die `.gitignore` im Repository schützt zusätzlich vor versehentlichen Uploads solcher Dateien.
+**Keine echten Finanzdaten gehören in dieses GitHub-Repository.**
+
+Die Excel-Datei liegt entweder lokal auf dem Gerät oder im vom Nutzer autorisierten Dropbox-App-Ordner. Bei empfohlenem **App Folder**-Zugriff hat die PWA keinen Zugriff auf die übrigen Dropbox-Dateien.
