@@ -1,10 +1,13 @@
-const CACHE = "finance-cockpit-v1";
+const CACHE = "finance-cockpit-v2";
 const SHEETJS = "https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js";
+const MSAL = "https://alcdn.msftauth.net/browser/2.35.0/js/msal-browser.min.js";
 const LOCAL_ASSETS = [
   "./",
   "./index.html",
   "./styles.css",
+  "./onedrive.css",
   "./app.js",
+  "./onedrive.js",
   "./manifest.webmanifest",
   "./icon.svg"
 ];
@@ -13,11 +16,13 @@ self.addEventListener("install", (event) => {
   event.waitUntil((async () => {
     const cache = await caches.open(CACHE);
     await cache.addAll(LOCAL_ASSETS);
-    try {
-      const response = await fetch(SHEETJS, { mode: "no-cors" });
-      await cache.put(SHEETJS, response);
-    } catch (_) {
-      // Die App bleibt online funktionsfähig; SheetJS wird beim nächsten Online-Aufruf erneut geladen.
+    for (const asset of [SHEETJS, MSAL]) {
+      try {
+        const response = await fetch(asset, { mode: "no-cors" });
+        await cache.put(asset, response);
+      } catch (_) {
+        // Externe Bibliotheken werden beim nächsten Online-Aufruf erneut geladen.
+      }
     }
     self.skipWaiting();
   })());
