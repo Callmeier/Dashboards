@@ -12,7 +12,7 @@
   <link rel="icon" href="./icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="./icon.svg">
   <link rel="stylesheet" href="./styles.css">
-  <link rel="stylesheet" href="./onedrive.css">
+  <link rel="stylesheet" href="./dropbox.css">
 </head>
 <body>
   <div class="app-shell">
@@ -32,54 +32,55 @@
       <section id="syncPanel" class="card sync-panel hidden">
         <div class="sync-head">
           <div>
-            <span class="eyebrow">OneDrive + Excel</span>
+            <span class="eyebrow">Dropbox + Excel</span>
             <h2>Monatsstände direkt erfassen</h2>
-            <p>Die PWA schreibt ausschließlich in <strong>03_Monatsstaende</strong>. Deine Formeln und Auswertungen bleiben in Excel bestehen.</p>
+            <p>Die PWA lädt deine Excel-Datei aus einem geschützten Dropbox-App-Ordner, ändert nur die Monatsstände und speichert die vollständige Arbeitsmappe wieder zurück.</p>
           </div>
           <button id="syncClose" class="text-button" type="button">Schließen</button>
         </div>
 
         <div class="sync-grid">
           <article class="sync-step">
-            <div class="step-title"><span class="step-number">1</span><strong>Microsoft-App verbinden</strong></div>
-            <label for="clientIdInput">Microsoft App-ID</label>
-            <input id="clientIdInput" class="text-input" type="text" autocomplete="off" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
-            <label for="redirectUriValue">Diese Umleitungs-URL in Microsoft Entra eintragen</label>
+            <div class="step-title"><span class="step-number">1</span><strong>Dropbox verbinden</strong></div>
+            <label for="dropboxAppKey">Dropbox App-Key</label>
+            <input id="dropboxAppKey" class="text-input" type="text" autocomplete="off" placeholder="App-Key aus der Dropbox App Console">
+            <label for="redirectUriValue">Diese Umleitungs-URL in Dropbox eintragen</label>
             <input id="redirectUriValue" class="text-input code-input" type="text" readonly>
             <div class="inline-actions">
-              <button id="saveClientId" class="button secondary" type="button">App-ID speichern</button>
-              <button id="microsoftLogin" class="button primary" type="button">Microsoft verbinden</button>
-              <button id="microsoftLogout" class="button secondary hidden" type="button">Trennen</button>
+              <button id="saveDropboxAppKey" class="button secondary" type="button">App-Key speichern</button>
+              <button id="dropboxLogin" class="button primary" type="button">Dropbox verbinden</button>
+              <button id="dropboxLogout" class="button secondary hidden" type="button">Trennen</button>
             </div>
-            <span id="microsoftAccount" class="sync-meta">Nicht verbunden</span>
+            <span id="dropboxAccount" class="sync-meta">Nicht verbunden</span>
+            <div class="dropbox-note">Empfohlen: Dropbox-App mit <strong>App Folder</strong>-Zugriff. Dann sieht die PWA nicht deine übrige Dropbox.</div>
           </article>
 
           <article class="sync-step">
-            <div class="step-title"><span class="step-number">2</span><strong>Excel-Datei in OneDrive wählen</strong></div>
-            <label for="onedriveSearch">Dateiname suchen</label>
-            <div class="search-row">
-              <input id="onedriveSearch" class="text-input" type="search" placeholder="z. B. Finance Cockpit">
-              <button id="searchOneDrive" class="button secondary" type="button">Suchen</button>
+            <div class="step-title"><span class="step-number">2</span><strong>Finance-Excel in Dropbox</strong></div>
+            <div class="inline-actions">
+              <button id="refreshDropboxFiles" class="button secondary" type="button">Dateien anzeigen</button>
+              <button id="uploadDropboxButton" class="button secondary" type="button">Aktuelle Excel hochladen</button>
+              <input id="dropboxUploadInput" type="file" accept=".xlsx,.xlsm" hidden>
             </div>
-            <select id="onedriveResults" class="wide-select hidden" aria-label="OneDrive-Datei"></select>
-            <button id="useOneDriveFile" class="button secondary hidden" type="button">Diese Datei verwenden</button>
-            <span id="selectedOneDriveFile" class="sync-meta">Noch keine OneDrive-Datei ausgewählt.</span>
+            <select id="dropboxFiles" class="wide-select hidden" aria-label="Dropbox-Datei"></select>
+            <button id="useDropboxFile" class="button secondary hidden" type="button">Diese Datei verwenden</button>
+            <span id="selectedDropboxFile" class="sync-meta">Noch keine Dropbox-Datei ausgewählt.</span>
           </article>
 
           <article class="sync-step">
             <div class="step-title"><span class="step-number">3</span><strong>Monat laden und Werte eingeben</strong></div>
             <div class="search-row">
               <select id="entryMonth" class="wide-select" aria-label="Monat für Datenerfassung"></select>
-              <button id="loadEntries" class="button secondary" type="button">Monatsstände laden</button>
+              <button id="loadEntries" class="button secondary" type="button">Neu aus Dropbox laden</button>
             </div>
             <span id="entrySummary" class="sync-meta">Noch keine Monatsstände geladen.</span>
           </article>
         </div>
 
-        <div id="syncStatus" class="sync-status">Die App-ID wird nur lokal auf deinem Gerät gespeichert.</div>
+        <div id="syncStatus" class="sync-status">Dropbox-App-Key und Zugriffstoken werden nur lokal auf deinem Gerät gespeichert.</div>
         <div id="entryRows" class="entry-list"></div>
         <div class="save-bar">
-          <button id="saveEntries" class="button primary hidden" type="button">Änderungen in Excel speichern</button>
+          <button id="saveEntries" class="button primary hidden" type="button">Änderungen in Excel + Dropbox speichern</button>
         </div>
       </section>
 
@@ -91,7 +92,7 @@
           <div class="actions">
             <button id="welcomeImportButton" class="button primary" type="button">Excel-Datei auswählen</button>
           </div>
-          <p class="privacy-note">Keine Finanzdaten werden an GitHub oder den Webserver übertragen. Bei OneDrive-Synchronisierung werden Werte direkt über Microsoft Graph in deine ausgewählte Excel-Datei geschrieben.</p>
+          <p class="privacy-note">Keine Finanzdaten werden an GitHub oder den Webserver übertragen. Bei Dropbox-Synchronisierung wird ausschließlich deine ausgewählte Excel-Datei über die Dropbox-API geladen und gespeichert.</p>
         </div>
       </section>
 
@@ -194,7 +195,7 @@
         </section>
 
         <footer>
-          <span>Die Datenverarbeitung erfolgt lokal im Browser bzw. bei OneDrive-Synchronisierung über Microsoft Graph.</span>
+          <span>Datenverarbeitung lokal im Browser; Dropbox wird nur für die ausgewählte Excel-Datei verwendet.</span>
           <button id="forgetButton" class="text-button" type="button">Lokale Datei vergessen</button>
         </footer>
       </section>
@@ -202,8 +203,11 @@
   </div>
 
   <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
-  <script src="https://alcdn.msftauth.net/browser/2.35.0/js/msal-browser.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dropbox@10.34.0/dist/Dropbox-sdk.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
   <script src="./app.js"></script>
-  <script src="./onedrive.js"></script>
+  <script src="./dropbox-auth.js"></script>
+  <script src="./finance-xlsx.js"></script>
+  <script src="./dropbox-sync.js"></script>
 </body>
 </html>
