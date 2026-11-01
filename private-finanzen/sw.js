@@ -1,4 +1,4 @@
-const CACHE = "finance-cockpit-v8";
+const CACHE = "finance-cockpit-v9";
 const EXTERNAL_ASSETS = [
   "https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js",
   "https://cdn.jsdelivr.net/npm/dropbox@10.34.0/dist/Dropbox-sdk.min.js",
@@ -12,7 +12,7 @@ const LOCAL_ASSETS = [
   "./app-v8.js?v=8",
   "./dropbox-auth.js",
   "./finance-xlsx-v8.js?v=8",
-  "./dropbox-sync-v8.js?v=8",
+  "./dropbox-sync-v8.js?v=9",
   "./manifest.webmanifest",
   "./icon.svg"
 ];
