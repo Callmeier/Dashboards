@@ -12,8 +12,7 @@ const LOCAL_ASSETS = [
   "./app-v8.js?v=8",
   "./dropbox-auth.js",
   "./finance-xlsx-v8.js?v=8",
-  "./dropbox-sync-loader-v7.js?v=7",
-  "./dropbox-sync.js?v=7",
+  "./dropbox-sync-v8.js?v=8",
   "./manifest.webmanifest",
   "./icon.svg"
 ];
