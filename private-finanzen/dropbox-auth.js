@@ -10,7 +10,8 @@
   };
   let client=null;
   const redirectUri=()=>`${location.origin}${location.pathname}`;
-  const appKey=()=>localStorage.getItem(K.app)||"";
+  const DEFAULT_APP_KEY="vqm3q95w02p32hl";
+  const appKey=()=>localStorage.getItem(K.app)||DEFAULT_APP_KEY;
   const refreshToken=()=>localStorage.getItem(K.refresh)||"";
   function saveAppKey(value){
     const key=String(value||"").trim();
