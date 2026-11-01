@@ -33,8 +33,8 @@
         <div class="sync-head">
           <div>
             <span class="eyebrow">Dropbox + Excel</span>
-            <h2>Monatsstände direkt erfassen</h2>
-            <p>Die PWA lädt deine Excel-Datei aus einem geschützten Dropbox-App-Ordner, ändert nur die Monatsstände und speichert die vollständige Arbeitsmappe wieder zurück.</p>
+            <h2>Stichtagswerte direkt erfassen</h2>
+            <p>Die PWA lädt deine Excel-Datei aus einem geschützten Dropbox-App-Ordner. Du kannst beliebige Stichtage anlegen, auch mehrfach pro Monat oder nach längeren Pausen.</p>
           </div>
           <button id="syncClose" class="text-button" type="button">Schließen</button>
         </div>
@@ -68,12 +68,12 @@
           </article>
 
           <article class="sync-step">
-            <div class="step-title"><span class="step-number">3</span><strong>Monat laden und Werte eingeben</strong></div>
+            <div class="step-title"><span class="step-number">3</span><strong>Stichtag laden oder neu anlegen</strong></div>
             <div class="search-row">
               <select id="entryMonth" class="wide-select" aria-label="Monat für Datenerfassung"></select>
               <button id="loadEntries" class="button secondary" type="button">Neu aus Dropbox laden</button>
             </div>
-            <span id="entrySummary" class="sync-meta">Noch keine Monatsstände geladen.</span>
+            <span id="entrySummary" class="sync-meta">Noch kein Stichtag geladen.</span>
           </article>
         </div>
 
@@ -100,7 +100,7 @@
         <div class="control-row">
           <div>
             <div class="eyebrow">Auswertung</div>
-            <select id="monthSelect" aria-label="Auswertungsmonat"></select>
+            <select id="monthSelect" aria-label="Auswertungsstichtag"></select>
           </div>
           <div class="file-state">
             <span id="statusDot" class="status-dot"></span>
@@ -120,7 +120,7 @@
             <span id="netWorthSub" class="kpi-sub">–</span>
           </article>
           <article class="card kpi">
-            <span class="kpi-label">Veränderung zum Vormonat</span>
+            <span class="kpi-label">Veränderung zum vorherigen Stichtag</span>
             <strong id="momChange" class="kpi-value compact">–</strong>
             <span id="momChangePct" class="kpi-sub">–</span>
           </article>
@@ -151,7 +151,7 @@
             <div class="panel-head">
               <div>
                 <span class="eyebrow">Entwicklung</span>
-                <h2>Nettovermögen im Jahresverlauf</h2>
+                <h2>Nettovermögen im Zeitverlauf</h2>
               </div>
             </div>
             <div id="trendChart" class="chart" role="img" aria-label="Jahresverlauf Nettovermögen"></div>
@@ -205,9 +205,9 @@
   <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/dropbox@10.34.0/dist/Dropbox-sdk.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
-  <script src="./app.js"></script>
+  <script src="./app-v8.js?v=8"></script>
   <script src="./dropbox-auth.js"></script>
-  <script src="./finance-xlsx-v7.js?v=7"></script>
-  <script src="./dropbox-sync-loader-v7.js?v=7"></script>
+  <script src="./finance-xlsx-v8.js?v=8"></script>
+  <script src="./dropbox-sync-v8.js?v=8"></script>
 </body>
 </html>
